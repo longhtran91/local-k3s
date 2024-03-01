@@ -1,0 +1,6 @@
+installCRDs: true
+serviceAccount:
+  annotations:
+    eks.amazonaws.com/role-arn: arn:aws:iam::734061930556:role/K3SLocalLhtranCertManagerRole
+securityContext:
+  fsGroup: 1001

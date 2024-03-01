@@ -1,0 +1,20 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: curlpod
+spec:
+  template:
+    spec:
+      containers:
+      - name: curlpod
+        image: buildpack-deps:curl
+        command: ['/bin/sh',  '-c', 'curl -s -k -H "Authorization: Bearer $(cat /var/run/secrets/kubernetes.io/serviceaccount/token)" https://kubernetes.default.svc.cluster.local/openid/v1/jwks > /mnt/conf/jwks && curl -s -k -H "Authorization: Bearer $(cat /var/run/secrets/kubernetes.io/serviceaccount/token)" https://kubernetes.default.svc.cluster.local/.well-known/openid-configuration > /mnt/conf/openid-configuration']
+        volumeMounts:
+          - name: hostpath-vol
+            mountPath: /mnt/conf
+      restartPolicy: Never
+      volumes:
+        - name: hostpath-vol
+          hostPath:
+            path: /home/longtran/Documents/Github/test-argocd-local/openid_s3_setup
+  backoffLimit: 1

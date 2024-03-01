@@ -1,0 +1,30 @@
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt-local-lhtran-net-stg
+spec:
+  acme:
+    email: longhtran91@gmail.com
+    server: https://acme-staging-v02.api.letsencrypt.org/directory
+    privateKeySecretRef:
+      name: letsencrypt-local-lhtran-net-stg
+    solvers:
+      - dns01:
+          route53:
+            region: us-east-1
+            hostedZoneID: Z046591918Y9DTVCQDP8Z
+        selector:
+          dnsZones:
+          - 'lhtran.net'
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: test-cert
+spec:
+  secretName: test-cert
+  issuerRef:
+    name: letsencrypt-local-lhtran-net-stg
+    kind: ClusterIssuer
+  dnsNames:
+  - 'test.local.lhtran.net'
